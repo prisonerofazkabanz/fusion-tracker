@@ -1,0 +1,166 @@
+{
+  "locked": {
+    "coi_flag": "Federal loans/subsidies required. Trump family ownership creates potential preferential treatment risk vs. competing startups.",
+    "confidence": {
+      "science_validity": 85,
+      "tae_2031_timeline": 28,
+      "commercial_by_2040": 45,
+      "coi_impact_on_tae": 72
+    },
+    "barriers": [
+      {
+        "id": "tritium",
+        "severity": "red",
+        "title": "Tritium Scarcity",
+        "detail": "~25kg global supply. Lithium blanket breeding unproven at commercial scale."
+      },
+      {
+        "id": "materials",
+        "severity": "yellow",
+        "title": "Materials Degradation",
+        "detail": "Neutron bombardment degrades structural components faster than fission. No material validated for full commercial duty cycle. EU €340M research program launched Jan 2026."
+      },
+      {
+        "id": "timeline",
+        "severity": "yellow",
+        "title": "Timeline Slippage History",
+        "detail": "ITER over $22B and years behind. Fusion timelines have historically slipped by 5-10 years across all major programs."
+      },
+      {
+        "id": "netenergy",
+        "severity": "blue",
+        "title": "Net Energy Positive at Grid Scale",
+        "detail": "NIF achieved ignition in 2022 but energy output was laser-input dependent. Commercial energy positive remains undemonstrated at utility scale."
+      }
+    ],
+    "last_manual_review": "2026-04-19",
+    "reviewer": "Peterson"
+  },
+  "dynamic": {
+    "milestone_banner": {
+      "text": "KSTAR sustained plasma at 100M°C for 102 seconds — Feb 2026 · IAEA verified · Previous record: 48s",
+      "highlight": "100M°C for 102 seconds",
+      "last_updated": "2026-04-19"
+    },
+    "companies": {
+      "kstar": {
+        "name": "KSTAR",
+        "sub": "Korea Institute of Fusion Energy",
+        "flag": "active",
+        "status_label": "Record Set",
+        "status_class": "active",
+        "description": "South Korean government tokamak. Set 102-second plasma record Feb 2026. Primary benchmark for sustained confinement.",
+        "metrics": [
+          { "val": "102s", "key": "Plasma Hold" },
+          { "val": "100M°C", "key": "Temperature" },
+          { "val": "Govt", "key": "Funding" }
+        ],
+        "last_updated": "2026-04-19"
+      },
+      "cfs": {
+        "name": "Commonwealth Fusion",
+        "sub": "CFS · Cambridge, MA",
+        "flag": "active",
+        "status_label": "On Track",
+        "status_class": "active",
+        "description": "High-temp superconducting magnets at 20 tesla. SPARC demo reactor targeting late 2027 switch-on. Backed by Google + Breakthrough Energy.",
+        "metrics": [
+          { "val": "$1.8B", "key": "Raised" },
+          { "val": "2027", "key": "SPARC Target" },
+          { "val": "20T", "key": "Magnet Field" }
+        ],
+        "last_updated": "2026-04-19"
+      },
+      "helion": {
+        "name": "Helion Energy",
+        "sub": "Everett, WA",
+        "flag": "active",
+        "status_label": "Ahead of Schedule",
+        "status_class": "active",
+        "description": "Polaris (Gen 7) completed first full operational cycle Mar 2026 — ahead of 18-month forecast. Power purchase agreement with Microsoft. Sam Altman-backed.",
+        "metrics": [
+          { "val": "$2.2B", "key": "Committed" },
+          { "val": "2028", "key": "First Power" },
+          { "val": "MSFT", "key": "PPA Partner" }
+        ],
+        "last_updated": "2026-04-19"
+      },
+      "tae": {
+        "name": "TAE Technologies / TMTG",
+        "sub": "Foothill Ranch, CA · DJT Merger",
+        "flag": "deal",
+        "status_label": "Merger Pending",
+        "status_class": "deal",
+        "description": "TAE announced H-boron fusion at commercially relevant ratios Jan 2026. Merging with Trump Media in $6B all-stock deal targeting mid-2026 close. 1,600 patents. Previously raised $1.3B from Google, Chevron, Goldman.",
+        "metrics": [
+          { "val": "$6B", "key": "Deal Value" },
+          { "val": "2031", "key": "1st Power Target" },
+          { "val": "DJT Jr.", "key": "Board Seat" }
+        ],
+        "last_updated": "2026-04-19"
+      },
+      "iter": {
+        "name": "ITER",
+        "sub": "Cadarache, France · International",
+        "flag": "watch",
+        "status_label": "Delayed",
+        "status_class": "watch",
+        "description": "35-nation megaproject. Validating tritium breeding blanket concept critical to all commercial fusion. Budget now exceeds $22B. First plasma target: 2027.",
+        "metrics": [
+          { "val": "$22B+", "key": "Budget" },
+          { "val": "2027", "key": "First Plasma" },
+          { "val": "35", "key": "Nations" }
+        ],
+        "last_updated": "2026-04-19"
+      },
+      "east": {
+        "name": "EAST / China Program",
+        "sub": "Hefei · CAEA",
+        "flag": "watch",
+        "status_label": "Tracking",
+        "status_class": "watch",
+        "description": "China's EAST is quietly logging operational hours rivaling KSTAR. Beijing allocated $1.5B to domestic fusion under 14th Five-Year Plan. Framed as national strategic priority.",
+        "metrics": [
+          { "val": "$1.5B", "key": "Allocated" },
+          { "val": "State", "key": "Backing" },
+          { "val": "High", "key": "Priority" }
+        ],
+        "last_updated": "2026-04-19"
+      }
+    },
+    "timeline": [
+      {
+        "date": "DEC 18, 2025",
+        "title": "Merger Announced",
+        "detail": "All-stock deal signed. Boards approved. DJT stock +33% on day of.",
+        "status": "done"
+      },
+      {
+        "date": "DEC 2025",
+        "title": "$200M Cash to TAE at Signing",
+        "detail": "Additional $100M available on SEC Form S-4 filing.",
+        "status": "done"
+      },
+      {
+        "date": "MID-2026 · PENDING",
+        "title": "Shareholder + Regulatory Close",
+        "detail": "SEC review ongoing. Ethics scrutiny expected. Trump Jr. joins board.",
+        "status": "pending"
+      },
+      {
+        "date": "LATE 2026",
+        "title": "Plant Site Selection Begins",
+        "detail": "Nunes stated site search begins after deal closes.",
+        "status": "future"
+      },
+      {
+        "date": "LATE 2031",
+        "title": "First Power Generation Target",
+        "detail": "TAE's stated goal for first electricity from utility-scale plant.",
+        "status": "future"
+      }
+    ],
+    "last_auto_update": "2026-04-19",
+    "auto_update_summary": "Initial manual population. No automated update run yet."
+  }
+}

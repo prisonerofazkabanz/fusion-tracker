@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FUSION WATCH // Peterson Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Chakra+Petch:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --plasma: #FF6B1A;
+    --plasma-dim: #CC4A00;
+    --plasma-glow: rgba(255,107,26,0.15);
+    --bg: #080C10;
+    --bg2: #0D1219;
+    --bg3: #121820;
+    --grid: rgba(255,107,26,0.06);
+    --border: rgba(255,107,26,0.2);
+    --border-bright: rgba(255,107,26,0.5);
+    --text: #C8D8E8;
+    --text-dim: #6A7A8A;
+    --text-bright: #E8F4FF;
+    --green: #00D4A0;
+    --yellow: #F0C040;
+    --red: #FF4060;
+    --blue: #4090FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Chakra Petch', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(255,107,26,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(8,12,16,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .logo { display: flex; align-items: center; gap: 14px; }
+  .plasma-icon { width: 36px; height: 36px; position: relative; flex-shrink: 0; }
+  .plasma-icon svg { width: 100%; height: 100%; animation: spin 8s linear infinite; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .logo-text { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; }
+  .logo-title { font-size: 20px; font-weight: 700; color: var(--plasma); letter-spacing: 0.15em; text-transform: uppercase; line-height: 1; }
+  .header-right { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .live-badge { display: flex; align-items: center; gap: 8px; font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--green); text-transform: uppercase; }
+  .pulse-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,212,160,0.4);}50%{opacity:0.6;box-shadow:0 0 0 6px rgba(0,212,160,0);} }
+  #last-updated { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; }
+  #data-updated { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--plasma-dim); letter-spacing: 0.1em; }
+  .milestone-banner {
+    background: linear-gradient(135deg, rgba(255,107,26,0.12), rgba(255,107,26,0.04));
+    border: 1px solid var(--border-bright);
+    border-radius: 2px;
+    padding: 16px 24px;
+    margin: 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: fadeIn 0.6s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);} }
+  .banner-label { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.25em; color: var(--plasma); text-transform: uppercase; white-space: nowrap; padding: 4px 8px; border: 1px solid var(--plasma-dim); background: rgba(255,107,26,0.1); }
+  .banner-text { font-size: 13px; color: var(--text-bright); font-weight: 400; }
+  .banner-text strong { color: var(--plasma); font-weight: 600; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; margin-top: 32px; }
+  .section-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.25em; color: var(--plasma); text-transform: uppercase; }
+  .section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+  .company-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 8px; }
+  .company-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 2px; padding: 18px 20px; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s; animation: fadeIn 0.5s ease both; }
+  .company-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+  .company-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--plasma); }
+  .company-card.flag-deal::before { background: var(--yellow); }
+  .company-card.flag-active::before { background: var(--green); }
+  .company-card.flag-watch::before { background: var(--blue); }
+  .company-card.flag-alert::before { background: var(--red); }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .company-name { font-size: 15px; font-weight: 700; color: var(--text-bright); letter-spacing: 0.05em; }
+  .company-sub { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 2px; letter-spacing: 0.1em; }
+  .status-badge { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.15em; padding: 3px 7px; border-radius: 2px; text-transform: uppercase; white-space: nowrap; }
+  .status-badge.deal { background: rgba(240,192,64,0.12); color: var(--yellow); border: 1px solid rgba(240,192,64,0.3); }
+  .status-badge.active { background: rgba(0,212,160,0.1); color: var(--green); border: 1px solid rgba(0,212,160,0.3); }
+  .status-badge.watch { background: rgba(64,144,255,0.1); color: var(--blue); border: 1px solid rgba(64,144,255,0.3); }
+  .status-badge.alert { background: rgba(255,64,96,0.1); color: var(--red); border: 1px solid rgba(255,64,96,0.3); }
+  .card-desc { font-size: 12px; color: var(--text-dim); line-height: 1.6; margin-bottom: 14px; }
+  .card-metrics { display: flex; gap: 16px; flex-wrap: wrap; }
+  .metric { display: flex; flex-direction: column; gap: 2px; }
+  .metric-val { font-family: 'Share Tech Mono', monospace; font-size: 14px; color: var(--text-bright); font-weight: 600; }
+  .metric-key { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+  .conflict-box { background: rgba(255,64,96,0.06); border: 1px solid rgba(255,64,96,0.2); border-radius: 2px; padding: 10px 14px; margin-top: 12px; font-size: 11px; color: rgba(255,64,96,0.9); font-family: 'Share Tech Mono', monospace; letter-spacing: 0.05em; line-height: 1.5; }
+  .conflict-box::before { content: '⚑ COI FLAG: '; font-weight: 700; }
+  .locked-badge { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; padding: 2px 6px; border: 1px solid var(--border); margin-top: 8px; display: inline-block; }
+  .timeline { position: relative; padding-left: 24px; margin-bottom: 8px; }
+  .timeline::before { content: ''; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 1px; background: var(--border); }
+  .tl-item { position: relative; padding: 10px 0 10px 16px; animation: fadeIn 0.4s ease both; }
+  .tl-item::before { content: ''; position: absolute; left: -17px; top: 16px; width: 8px; height: 8px; border-radius: 50%; background: var(--bg); border: 2px solid var(--border); }
+  .tl-item.done::before { background: var(--green); border-color: var(--green); }
+  .tl-item.pending::before { background: var(--plasma); border-color: var(--plasma); animation: pulse-orange 2s infinite; }
+  .tl-item.future::before { background: var(--bg); border-color: var(--text-dim); }
+  @keyframes pulse-orange { 0%,100%{box-shadow:0 0 0 0 rgba(255,107,26,0.4);}50%{box-shadow:0 0 0 5px rgba(255,107,26,0);} }
+  .tl-date { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; margin-bottom: 3px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text-bright); }
+  .tl-detail { font-size: 11px; color: var(--text-dim); margin-top: 3px; line-height: 1.5; }
+  .tl-item.done .tl-title { color: var(--green); }
+  .tl-item.pending .tl-title { color: var(--plasma); }
+  .news-grid { display: grid; gap: 8px; }
+  .news-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 2px; padding: 14px 18px; display: flex; gap: 14px; align-items: flex-start; transition: border-color 0.2s; animation: fadeIn 0.4s ease both; text-decoration: none; }
+  .news-item:hover { border-color: var(--border-bright); }
+  .news-tag { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.12em; padding: 3px 6px; background: var(--plasma-glow); color: var(--plasma); border: 1px solid var(--border); text-transform: uppercase; white-space: nowrap; margin-top: 2px; flex-shrink: 0; }
+  .news-tag.tmtg { background: rgba(240,192,64,0.08); color: var(--yellow); border-color: rgba(240,192,64,0.2); }
+  .news-tag.science { background: rgba(64,144,255,0.08); color: var(--blue); border-color: rgba(64,144,255,0.2); }
+  .news-tag.policy { background: rgba(0,212,160,0.08); color: var(--green); border-color: rgba(0,212,160,0.2); }
+  .news-content { flex: 1; min-width: 0; }
+  .news-headline { font-size: 13px; font-weight: 600; color: var(--text-bright); margin-bottom: 4px; line-height: 1.4; }
+  .news-meta { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; }
+  .news-arrow { color: var(--text-dim); font-size: 16px; flex-shrink: 0; margin-top: 1px; transition: color 0.2s, transform 0.2s; }
+  .news-item:hover .news-arrow { color: var(--plasma); transform: translateX(3px); }
+  .loading-row { padding: 14px 18px; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 0.1em; display: flex; align-items: center; gap: 10px; }
+  .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--plasma); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  .error-row { padding: 14px 18px; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--red); letter-spacing: 0.1em; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .two-col{grid-template-columns:1fr;} .company-grid{grid-template-columns:1fr;} .header-inner{flex-wrap:wrap;gap:10px;} }
+  .panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
+  .panel-title { padding: 12px 18px; border-bottom: 1px solid var(--border); font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--plasma); text-transform: uppercase; background: var(--bg3); }
+  .panel-body { padding: 16px 18px; }
+  .confidence-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; }
+  .confidence-label { color: var(--text-dim); font-size: 11px; min-width: 140px; }
+  .confidence-bar-wrap { flex: 1; height: 4px; background: var(--bg); border-radius: 2px; overflow: hidden; }
+  .confidence-bar { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--plasma-dim), var(--plasma)); transition: width 1s ease; }
+  .confidence-val { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-bright); min-width: 34px; text-align: right; }
+  .auto-update-note { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; padding: 10px 14px; background: var(--bg3); border: 1px solid var(--border); margin-top: 12px; line-height: 1.6; }
+  footer { margin-top: 48px; padding: 20px 0; border-top: 1px solid var(--border); text-align: center; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.15em; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="plasma-icon">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="16" stroke="#FF6B1A" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+            <ellipse cx="18" cy="18" rx="16" ry="7" stroke="#FF6B1A" stroke-width="1" opacity="0.6"/>
+            <ellipse cx="18" cy="18" rx="7" ry="16" stroke="#FF6B1A" stroke-width="1" opacity="0.6"/>
+            <circle cx="18" cy="18" r="4" fill="#FF6B1A" opacity="0.9"/>
+            <circle cx="18" cy="18" r="2" fill="#FFB080"/>
+          </svg>
+        </div>
+        <div>
+          <div class="logo-text">Intelligence Tracker</div>
+          <div class="logo-title">Fusion Watch</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="live-badge"><div class="pulse-dot"></div>Live Feed</div>
+        <div id="data-updated">DATA: --</div>
+        <div id="last-updated">--</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="milestone-banner" id="milestone-banner">
+    <span class="banner-label">Latest Record</span>
+    <span class="banner-text" id="banner-text">Loading...</span>
+  </div>
+
+  <div class="section-header">
+    <span class="section-label">Active Players</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="company-grid" id="company-grid">
+    <div class="loading-row"><div class="spinner"></div>LOADING PLAYER DATA...</div>
+  </div>
+
+  <div class="two-col" style="margin-top: 32px;">
+    <div>
+      <div class="section-header">
+        <span class="section-label">TAE/TMTG Merger Timeline</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="timeline" id="timeline">
+        <div class="loading-row"><div class="spinner"></div>LOADING...</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header">
+        <span class="section-label">Known Barriers (Sector-Wide)</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-body">
+          <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 14px; line-height: 1.6;">
+            Structural barriers applying across all fusion players regardless of progress claims.
+          </div>
+          <div id="barriers-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+          <div style="margin-top: 16px; border-top: 1px solid var(--border); padding-top: 14px;">
+            <div style="font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--text-dim); margin-bottom:10px; letter-spacing:0.1em; text-transform:uppercase;">
+              Confidence Assessment
+              <span style="color:var(--plasma-dim);"> · LOCKED · MANUAL REVIEW ONLY</span>
+            </div>
+            <div id="confidence-bars"></div>
+            <div style="font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--text-dim); margin-top:8px; letter-spacing:0.08em;">
+              * Subjective. Not modified by automated updates.
+            </div>
+          </div>
+          <div class="auto-update-note" id="auto-update-note">AUTO UPDATE: --</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header" style="margin-top: 36px;">
+    <span class="section-label">Live News Feed</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="news-grid" id="news-feed">
+    <div class="loading-row"><div class="spinner"></div>FETCHING FEED...</div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    FUSION WATCH // PETERSON INTELLIGENCE // LOCKED FIELDS: MANUAL REVIEW ONLY // NOT FINANCIAL ADVICE
+  </div>
+</footer>
+
+<script>
+// ─── LOAD DATA.JSON ───────────────────────────────────────────────────────────
+async function loadData() {
+  const resp = await fetch('data.json?cb=' + Date.now());
+  return await resp.json();
+}
+
+// ─── RENDER FUNCTIONS ────────────────────────────────────────────────────────
+function renderBanner(dynamic) {
+  const b = dynamic.milestone_banner;
+  const text = b.text.replace(b.highlight, `<strong>${b.highlight}</strong>`);
+  document.getElementById('banner-text').innerHTML = text;
+  document.getElementById('data-updated').textContent = 'DATA: ' + b.last_updated;
+}
+
+function renderCompanies(companies) {
+  const grid = document.getElementById('company-grid');
+  grid.innerHTML = Object.values(companies).map((c, i) => `
+    <div class="company-card flag-${c.flag}" style="animation-delay:${i*0.07}s">
+      <div class="card-top">
+        <div>
+          <div class="company-name">${c.name}</div>
+          <div class="company-sub">${c.sub}</div>
+        </div>
+        <span class="status-badge ${c.status_class}">${c.status_label}</span>
+      </div>
+      <div class="card-desc">${c.description}</div>
+      <div class="card-metrics">
+        ${c.metrics.map(m => `
+          <div class="metric">
+            <span class="metric-val">${m.val}</span>
+            <span class="metric-key">${m.key}</span>
+          </div>`).join('')}
+      </div>
+      ${c.flag === 'deal' ? `<div class="conflict-box" id="coi-flag"></div>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderCOI(locked) {
+  const el = document.getElementById('coi-flag');
+  if (el) el.textContent = locked.coi_flag;
+}
+
+function renderTimeline(items) {
+  document.getElementById('timeline').innerHTML = items.map((t, i) => `
+    <div class="tl-item ${t.status}" style="animation-delay:${i*0.08}s">
+      <div class="tl-date">${t.date}</div>
+      <div class="tl-title">${t.title}</div>
+      <div class="tl-detail">${t.detail}</div>
+    </div>
+  `).join('');
+}
+
+function renderBarriers(barriers) {
+  const colorMap = { red: 'var(--red)', yellow: 'var(--yellow)', blue: 'var(--blue)' };
+  document.getElementById('barriers-list').innerHTML = barriers.map(b => `
+    <div style="padding:10px 14px; background:var(--bg3); border-left:2px solid ${colorMap[b.severity] || 'var(--plasma)'}">
+      <div style="font-size:12px; font-weight:600; color:var(--text-bright); margin-bottom:3px;">${b.title}</div>
+      <div style="font-size:11px; color:var(--text-dim); line-height:1.5;">${b.detail}</div>
+    </div>
+  `).join('');
+}
+
+function renderConfidence(confidence) {
+  const labels = {
+    science_validity: 'Science validity',
+    tae_2031_timeline: '2031 TAE timeline',
+    commercial_by_2040: 'Commercial by 2040',
+    coi_impact_on_tae: 'COI impact on TAE'
+  };
+  const colorFn = v => v >= 70
+    ? 'linear-gradient(90deg,var(--plasma-dim),var(--plasma))'
+    : v >= 45
+    ? 'linear-gradient(90deg,#CC7000,#F0C040)'
+    : 'linear-gradient(90deg,#CC2040,#FF4060)';
+
+  document.getElementById('confidence-bars').innerHTML =
+    Object.entries(confidence).map(([k, v]) => `
+      <div class="confidence-row">
+        <span class="confidence-label">${labels[k] || k}</span>
+        <div class="confidence-bar-wrap">
+          <div class="confidence-bar" style="width:${v}%; background:${colorFn(v)}"></div>
+        </div>
+        <span class="confidence-val">${v}%</span>
+      </div>
+    `).join('');
+}
+
+function renderAutoNote(dynamic) {
+  document.getElementById('auto-update-note').textContent =
+    `AUTO UPDATE: ${dynamic.last_auto_update} — ${dynamic.auto_update_summary}`;
+}
+
+// ─── NEWS FEED ────────────────────────────────────────────────────────────────
+const RSS_SOURCES = [
+  { url: 'https://news.google.com/rss/search?q=nuclear+fusion+energy+2026&hl=en-US&gl=US&ceid=US:en', tag: 'science' },
+  { url: 'https://news.google.com/rss/search?q=TAE+Technologies+Trump+Media+fusion+merger&hl=en-US&gl=US&ceid=US:en', tag: 'tmtg' },
+  { url: 'https://news.google.com/rss/search?q=KSTAR+ITER+Helion+Commonwealth+Fusion&hl=en-US&gl=US&ceid=US:en', tag: 'science' },
+  { url: 'https://news.google.com/rss/search?q=fusion+energy+policy+DOE+2026&hl=en-US&gl=US&ceid=US:en', tag: 'policy' }
+];
+
+function tagLabel(tag) {
+  return { tmtg: 'TAE/TMTG', science: 'Science', policy: 'Policy' }[tag] || tag.toUpperCase();
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d)) return '';
+  const diff = Math.floor((Date.now() - d) / 1000);
+  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  return Math.floor(diff/86400) + 'd ago';
+}
+
+function parseRSS(xmlText) {
+  const doc = new DOMParser().parseFromString(xmlText, 'application/xml');
+  return Array.from(doc.querySelectorAll('item')).map(item => ({
+    title: item.querySelector('title')?.textContent?.trim() || '',
+    link: item.querySelector('link')?.textContent?.trim() || item.querySelector('guid')?.textContent?.trim() || '#',
+    pubDate: item.querySelector('pubDate')?.textContent || '',
+    source: item.querySelector('source')?.textContent?.trim() || ''
+  })).filter(i => i.title.length > 5);
+}
+
+async function fetchRSS(source) {
+  const resp = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(source.url));
+  const data = await resp.json();
+  return parseRSS(data.contents).map(i => ({ ...i, tag: source.tag }));
+}
+
+function renderNews(articles) {
+  const feed = document.getElementById('news-feed');
+  if (!articles.length) {
+    feed.innerHTML = `<div class="error-row">// NO ARTICLES RETRIEVED</div>`;
+    return;
+  }
+  const seen = new Set();
+  const unique = articles.filter(a => {
+    const key = a.title.slice(0, 40).toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  feed.innerHTML = unique.slice(0, 20).map((a, i) => `
+    <a class="news-item" href="${a.link}" target="_blank" rel="noopener" style="animation-delay:${i*0.04}s">
+      <span class="news-tag ${a.tag}">${tagLabel(a.tag)}</span>
+      <div class="news-content">
+        <div class="news-headline">${a.title.replace(/ - [^-]+$/, '')}</div>
+        <div class="news-meta">${a.source ? a.source + ' · ' : ''}${timeAgo(a.pubDate)}</div>
+      </div>
+      <span class="news-arrow">›</span>
+    </a>
+  `).join('');
+}
+
+async function loadFeed() {
+  try {
+    const results = await Promise.allSettled(RSS_SOURCES.map(fetchRSS));
+    let all = [];
+    results.forEach(r => { if (r.status === 'fulfilled') all = all.concat(r.value); });
+    all.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+    if (!all.length) throw new Error('empty');
+    renderNews(all);
+  } catch {
+    document.getElementById('news-feed').innerHTML = `<div class="error-row">// FEED UNAVAILABLE — CHECK NETWORK OR CORS PROXY</div>`;
+  }
+}
+
+// ─── TIMESTAMP ───────────────────────────────────────────────────────────────
+function updateTimestamp() {
+  const now = new Date();
+  document.getElementById('last-updated').textContent =
+    'REFRESHED ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+async function init() {
+  try {
+    const { locked, dynamic } = await loadData();
+    renderBanner(dynamic);
+    renderCompanies(dynamic.companies);
+    renderCOI(locked);
+    renderTimeline(dynamic.timeline);
+    renderBarriers(locked.barriers);
+    renderConfidence(locked.confidence);
+    renderAutoNote(dynamic);
+  } catch (e) {
+    console.error('Failed to load data.json:', e);
+    document.getElementById('company-grid').innerHTML = `<div class="error-row">// FAILED TO LOAD data.json</div>`;
+  }
+  loadFeed();
+  updateTimestamp();
+}
+
+init();
+setInterval(loadFeed, 15 * 60 * 1000);
+setInterval(updateTimestamp, 60 * 1000);
+</script>
+</body>
+</html>
