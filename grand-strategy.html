@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRAND STRATEGY // Peterson Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #080c0f;
+      --bg-card:  #0d1117;
+      --bg-card2: #111820;
+      --border:   rgba(232,84,10,0.18);
+      --border2:  rgba(255,255,255,0.06);
+      --orange:   #e8540a;
+      --orange2:  #ff6b35;
+      --green:    #00ff88;
+      --cyan:     #00c8ff;
+      --yellow:   #ffd700;
+      --red:      #ff4444;
+      --text:     #c8d8e8;
+      --muted:    #4a6070;
+      --dim:      #2a3a4a;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(rgba(232,84,10,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,84,10,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────────────── */
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,12,15,0.95);
+      backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 100;
+      padding: 0 24px;
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1400px; margin: 0 auto; height: 64px;
+    }
+    .logo-block { display: flex; align-items: center; gap: 14px; }
+    .logo-icon {
+      width: 36px; height: 36px;
+      border: 2px solid var(--orange);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: var(--orange);
+      clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+      background: rgba(232,84,10,0.1);
+    }
+    .logo-text { line-height: 1.2; }
+    .logo-label { font-size: 9px; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; }
+    .logo-name  { font-size: 17px; font-weight: 700; color: var(--orange); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    nav { display: flex; align-items: center; gap: 24px; }
+    nav a {
+      text-decoration: none; color: var(--muted); font-size: 11px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 4px 8px; border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: var(--orange); border-color: var(--border);
+    }
+    nav a.active { color: var(--orange2); }
+
+    .header-meta { display: flex; align-items: center; gap: 20px; font-size: 11px; color: var(--muted); }
+    .live-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); display: inline-block;
+      box-shadow: 0 0 6px var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .live-label { color: var(--green); letter-spacing: 0.1em; }
+
+    /* ── BANNER ─────────────────────────────────────── */
+    .banner-wrap { max-width: 1400px; margin: 0 auto; padding: 18px 24px 0; }
+    .banner {
+      border: 1px solid var(--orange);
+      padding: 12px 20px;
+      display: flex; align-items: center; gap: 16px;
+      background: rgba(232,84,10,0.06);
+    }
+    .banner-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.15em;
+      color: var(--bg); background: var(--orange);
+      padding: 3px 8px; white-space: nowrap; text-transform: uppercase;
+    }
+    .banner-text { color: var(--text); font-size: 12px; }
+    .banner-text span { color: var(--orange); font-weight: 700; }
+
+    /* ── SECTIONS ────────────────────────────────────── */
+    main { max-width: 1400px; margin: 0 auto; padding: 0 24px 48px; }
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin: 32px 0 16px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--orange);
+    }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+    .section-count { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+    /* ── CARDS GRID ──────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 16px;
+    }
+
+    .story-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 0;
+      display: flex; flex-direction: column;
+      transition: border-color 0.2s;
+    }
+    .story-card:hover { border-color: rgba(232,84,10,0.4); }
+
+    .card-header-bar {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--border2);
+    }
+    .card-title { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 0.02em; }
+    .card-subtitle { font-size: 10px; color: var(--muted); margin-top: 3px; letter-spacing: 0.08em; }
+
+    .badge {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.15em;
+      padding: 3px 7px; text-transform: uppercase; white-space: nowrap;
+      border: 1px solid; flex-shrink: 0; margin-left: 10px;
+    }
+    .badge-green  { color: var(--green);  border-color: var(--green);  background: rgba(0,255,136,0.07); }
+    .badge-orange { color: var(--orange); border-color: var(--orange); background: rgba(232,84,10,0.08); }
+    .badge-red    { color: var(--red);    border-color: var(--red);    background: rgba(255,68,68,0.07); }
+    .badge-cyan   { color: var(--cyan);   border-color: var(--cyan);   background: rgba(0,200,255,0.07); }
+    .badge-yellow { color: var(--yellow); border-color: var(--yellow); background: rgba(255,215,0,0.07); }
+    .badge-dim    { color: var(--muted);  border-color: var(--dim);    background: rgba(74,96,112,0.12); }
+
+    .card-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .card-summary { color: var(--text); font-size: 12px; line-height: 1.65; }
+
+    .metrics-row {
+      display: flex; gap: 0;
+      border-top: 1px solid var(--border2);
+      margin-top: 4px;
+    }
+    .metric {
+      flex: 1; padding: 10px 8px 8px;
+      border-right: 1px solid var(--border2);
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .metric:last-child { border-right: none; }
+    .metric-value { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 0.02em; }
+    .metric-label { font-size: 9px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+
+    .card-analysis { font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+    .intel-flag {
+      border: 1px solid var(--red);
+      background: rgba(255,68,68,0.06);
+      padding: 8px 12px; font-size: 11px;
+      color: var(--red); margin-top: 4px;
+    }
+    .intel-flag::before { content: "⚑ FLAG: "; font-weight: 700; }
+
+    .signal-flag {
+      border: 1px solid var(--cyan);
+      background: rgba(0,200,255,0.05);
+      padding: 8px 12px; font-size: 11px;
+      color: var(--cyan); margin-top: 4px;
+    }
+    .signal-flag::before { content: "◈ SIGNAL: "; font-weight: 700; }
+
+    /* ── CHOKEPOINT TABLE ────────────────────────────── */
+    .chokepoint-table {
+      width: 100%; border-collapse: collapse;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+    .chokepoint-table th {
+      text-align: left; padding: 10px 14px;
+      font-size: 10px; letter-spacing: 0.15em; color: var(--orange);
+      text-transform: uppercase; border-bottom: 1px solid var(--border);
+      font-weight: 700;
+    }
+    .chokepoint-table td {
+      padding: 10px 14px; font-size: 12px; color: var(--text);
+      border-bottom: 1px solid var(--border2);
+      vertical-align: top;
+    }
+    .chokepoint-table tr:last-child td { border-bottom: none; }
+    .chokepoint-table tr:hover td { background: rgba(232,84,10,0.04); }
+    .chokepoint-table .strait { color: #fff; font-weight: 500; }
+    .chokepoint-table .pct { color: var(--orange); font-weight: 700; }
+
+    /* ── INTEL FEED ──────────────────────────────────── */
+    .feed-list { display: flex; flex-direction: column; gap: 0; }
+    .feed-item {
+      border-bottom: 1px solid var(--border2);
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: 100px 1fr 120px;
+      gap: 12px;
+      align-items: start;
+      background: var(--bg-card);
+      transition: background 0.2s;
+    }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-item:hover { background: rgba(13,17,23,0.7); }
+    .feed-date { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; padding-top: 1px; }
+    .feed-title { font-size: 12px; color: var(--text); line-height: 1.5; }
+    .feed-source { font-size: 10px; color: var(--muted); text-align: right; letter-spacing: 0.06em; }
+    .feed-tag {
+      display: inline-block; font-size: 9px; letter-spacing: 0.12em;
+      padding: 1px 5px; text-transform: uppercase;
+      border: 1px solid; margin-bottom: 4px;
+    }
+    .tag-iran     { color: var(--red);    border-color: var(--red);    }
+    .tag-qatar    { color: var(--yellow); border-color: var(--yellow); }
+    .tag-russia   { color: var(--cyan);   border-color: var(--cyan);   }
+    .tag-venezuela{ color: var(--orange); border-color: var(--orange); }
+    .tag-energy   { color: var(--green);  border-color: var(--green);  }
+    .tag-chokepoints { color: var(--cyan); border-color: var(--cyan); }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 10px; color: var(--muted); letter-spacing: 0.1em;
+    }
+    footer a { color: var(--orange); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 700px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .header-meta { display: none; }
+      .feed-item { grid-template-columns: 1fr; }
+      .feed-source { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <div class="logo-block">
+      <div class="logo-icon">◈</div>
+      <div class="logo-text">
+        <div class="logo-label">Intelligence Tracker</div>
+        <div class="logo-name">Grand Strategy</div>
+      </div>
+    </div>
+
+    <nav>
+      <a href="index.html">Fusion Watch</a>
+      <a href="grand-strategy.html" class="active">Grand Strategy</a>
+    </nav>
+
+    <div class="header-meta">
+      <span><span class="live-dot"></span> <span class="live-label">LIVE FEED</span></span>
+      <span>DATA: <!-- GS:START:timestamp -->2026-04-29<!-- GS:END:timestamp --></span>
+      <span>REFRESHED <!-- GS:START:refreshtime -->22:41<!-- GS:END:refreshtime --></span>
+    </div>
+  </div>
+</header>
+
+<!-- ── LATEST SIGNAL BANNER ───────────────────────────── -->
+<div class="banner-wrap">
+  <!-- GS:START:banner -->
+  <div class="banner">
+    <span class="banner-tag">Latest Signal</span>
+    <span class="banner-text">
+      US energy monopoly consolidation enters Phase II — bilateral tanker-build requirements now active ·
+      <span>Qatar LNG infrastructure offline 47 days · Russia shadow fleet seizures continue</span>
+    </span>
+  </div>
+  <!-- GS:END:banner -->
+</div>
+
+<!-- ── MAIN ───────────────────────────────────────────── -->
+<main>
+
+  <!-- STORY CARDS -->
+  <div class="section-header">
+    <span class="section-title">Active Story Threads</span>
+    <span class="section-line"></span>
+    <span class="section-count">6 TRACKED · AUTO-UPDATED MONTHLY</span>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- ── IRAN KILL CHAIN ── -->
+    <div class="story-card">
+      <div class="card-header-bar">
+        <div>
+          <div class="card-title">Iran Kill Chain</div>
+          <div class="card-subtitle">Persian Gulf · Regime Status</div>
+        </div>
+        <!-- GS:START:badge:iran --><div class="badge badge-red">REGIME FRACTURED</div><!-- GS:END:badge:iran -->
+      </div>
+      <div class="card-body">
+        <!-- GS:START:card:iran -->
+        <p class="card-summary">
+          US–Israel joint operation Feb 2026 decapitated Iranian supreme leadership. Naval blockade removed Iranian crude from global markets. Successor factions contesting power with no unified command structure emerging.
+        </p>
+        <div class="metrics-row">
+          <div class="metric"><span class="metric-value">~0</span><span class="metric-label">Oil Exports MBD</span></div>
+          <div class="metric"><span class="metric-value">FRACTURED</span><span class="metric-label">Regime Status</span></div>
+          <div class="metric"><span class="metric-value">ACTIVE</span><span class="metric-label">Naval Blockade</span></div>
+        </div>
+        <p class="card-analysis">Monitor: faction consolidation, proxy reactivation in Lebanon/Yemen, oil return-to-market timeline.</p>
+        <!-- GS:END:card:iran -->
+      </div>
+    </div>
+
+    <!-- ── QATAR LNG ── -->
+    <div class="story-card">
+      <div class="card-header-bar">
+        <div>
+          <div class="card-title">Qatar LNG Strike</div>
+          <div class="card-subtitle">Ras Laffan · Mesaieed · Global LNG</div>
+        </div>
+        <!-- GS:START:badge:qatar --><div class="badge badge-yellow">MONITORING</div><!-- GS:END:badge:qatar -->
+      </div>
+      <div class="card-body">
+        <!-- GS:START:card:qatar -->
+        <p class="card-summary">
+          Strikes on Ras Laffan and Mesaieed Mar 2, 2026 instantly removed 20% of global LNG capacity. QatarEnergy has not confirmed repair timeline. Asia LNG spot price surge ongoing.
+        </p>
+        <div class="metrics-row">
+          <div class="metric"><span class="metric-value">-20%</span><span class="metric-label">Global LNG Cap.</span></div>
+          <div class="metric"><span class="metric-value">OFFLINE</span><span class="metric-label">Ras Laffan</span></div>
+          <div class="metric"><span class="metric-value">SURGING</span><span class="metric-label">Spot Price</span></div>
+        </div>
+        <p class="card-analysis">Monitor: repair assessment, Qatar diplomatic posture, China/Japan LNG import alternatives.</p>
+        <!-- GS:END:card:qatar -->
+      </div>
+    </div>
+
+    <!-- ── RUSSIA OIL DEGRADATION ── -->
+    <div class="story-card">
+      <div class="card-header-bar">
+        <div>
+          <div class="card-title">Russia Degradation</div>
+          <div class="card-subtitle">Refinery Strikes · Shadow Fleet · Export Capacity</div>
+        </div>
+        <!-- GS:START:badge:russia --><div class="badge badge-cyan">ACTIVE</div><!-- GS:END:badge:russia -->
+      </div>
+      <div class="card-body">
+        <!-- GS:START:card:russia -->
+        <p class="card-summary">
+          120 verified Ukraine strikes 2025–Apr 2026 targeting Russian oil infrastructure. 81 confirmed refinery attacks causing $1.3B physical damage and $13B in lost profits. Active US shadow fleet seizure operations compressing delivery capacity.
+        </p>
+        <div class="metrics-row">
+          <div class="metric"><span class="metric-value">-40%</span><span class="metric-label">Export Capacity</span></div>
+          <div class="metric"><span class="metric-value">81</span><span class="metric-label">Refinery Hits</span></div>
+          <div class="metric"><span class="metric-value">$13B</span><span class="metric-label">Lost Profits</span></div>
+        </div>
+        <p class="card-analysis">Monitor: fleet seizure pace, India/China absorption of discounted Russian crude, refinery rebuild attempts.</p>
+        <!-- GS:END:card:russia -->
+      </div>
+    </div>
+
+    <!-- ── VENEZUELA / AMERICAS ── -->
+    <div class="story-card">
+      <div class="card-header-bar">
+        <div>
+          <div class="card-title">Venezuela / Americas</div>
+          <div class="card-subtitle">Post-Maduro · US Gulf Coast Refining</div>
+        </div>
+        <!-- GS:START:badge:venezuela --><div class="badge badge-green">SECURED</div><!-- GS:END:badge:venezuela -->
+      </div>
+      <div class="card-body">
+        <!-- GS:START:card:venezuela -->
+        <p class="card-summary">
+          Maduro captured Jan 3, 2026 in US military operation. Venezuelan oil exports now under US operational control. Defense Production Act invoked Mar 2026 — Texas crude flowing to California at 1.5M BPD, replacing foreign imports. China/Russia/Cuba supply routes disrupted.
+        </p>
+        <div class="metrics-row">
+          <div class="metric"><span class="metric-value">CAPTURED</span><span class="metric-label">Maduro Status</span></div>
+          <div class="metric"><span class="metric-value">1.5M</span><span class="metric-label">BPD Redirected</span></div>
+          <div class="metric"><span class="metric-value">US CTRL</span><span class="metric-label">Export Control</span></div>
+        </div>
+        <p class="card-analysis">Monitor: successor government formation, PDVSA operational status, China response to supply disruption.</p>
+        <!-- GS:END:card:venezuela -->
+      </div>
+    </div>
+
+    <!-- ── CHOKEPOINTS ── -->
+    <div class="story-card">
+      <div class="card-header-bar">
+        <div>
+          <div class="card-title">Chokepoint Control</div>
+          <div class="card-subtitle">Malacca · Gibraltar · Hormuz · Panama</div>
+        </div>
+        <!-- GS:START:badge:chokepoints --><div class="badge badge-green">CONSOLIDATING</div><!-- GS:END:badge:chokepoints -->
+      </div>
+      <div class="card-body">
+        <!-- GS:START:card:chokepoints -->
+        <p class="card-summary">
+          All four strategic straits now under direct US influence or control. Philippines/Indonesia defensive pacts (Apr 2026) gate the Strait of Malacca — the transit point for 60% of China's oil imports. Morocco deal (Apr 17) secures Gibraltar. Iranian naval degradation controls Hormuz.
+        </p>
+        <div class="metrics-row">
+          <div class="metric"><span class="metric-value">4/4</span><span class="metric-label">Straits Gated</span></div>
+          <div class="metric"><span class="metric-value">60%</span><span class="metric-label">China Oil at Risk</span></div>
+          <div class="metric"><span class="metric-value">APR 26</span><span class="metric-label">Last Deal Closed</span></div>
+        </div>
+        <p class="card-analysis">Monitor: China naval response in South China Sea, Morocco deal ratification, Indonesia domestic political stability.</p>
+        <!-- GS:END:card:chokepoints -->
+      </div>
+    </div>
+
+    <!-- ── ENERGY MONOPOLY ── -->
+    <div class="story-card">
+      <div class="card-header-bar">
+        <div>
+          <div class="card-title">US Energy Monopoly</div>
+          <div class="card-subtitle">LNG Dominance · Bilateral Deals · Re-industrialization</div>
+        </div>
+        <!-- GS:START:badge:energy --><div class="badge badge-orange">EXECUTING</div><!-- GS:END:badge:energy -->
+      </div>
+      <div class="card-body">
+        <!-- GS:START:card:energy -->
+        <p class="card-summary">
+          United States is now the world's only high-volume LNG exporter following removal of all primary alternatives within a 90-day window (Jan–Mar 2026). Maritime Action Plan requires tanker-building in America as condition of energy deals — deliberate re-industrialization mechanism. $33B in bilateral energy/trade deals signed Apr 2026.
+        </p>
+        <div class="metrics-row">
+          <div class="metric"><span class="metric-value">SOLE</span><span class="metric-label">LNG Exporter</span></div>
+          <div class="metric"><span class="metric-value">$33B</span><span class="metric-label">Bilateral Deals</span></div>
+          <div class="metric"><span class="metric-value">6</span><span class="metric-label">New Partners</span></div>
+        </div>
+        <p class="card-analysis">Monitor: Greenland resource access negotiations, tanker-build compliance, OPEC+ response, EU energy dependence metrics.</p>
+        <div class="signal-flag">Maritime Action Plan now in force — buyer nations must construct tankers in US shipyards as deal condition.</div>
+        <!-- GS:END:card:energy -->
+      </div>
+    </div>
+
+  </div><!-- /cards-grid -->
+
+
+  <!-- CHOKEPOINT MATRIX TABLE -->
+  <div class="section-header">
+    <span class="section-title">Chokepoint Control Matrix</span>
+    <span class="section-line"></span>
+  </div>
+
+  <!-- GS:START:chokepoint_table -->
+  <table class="chokepoint-table">
+    <thead>
+      <tr>
+        <th>Strait</th>
+        <th>Method</th>
+        <th>Strategic Value</th>
+        <th>Status</th>
+        <th>Risk</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strait">Strait of Malacca</td>
+        <td>Philippines + Indonesia defensive pacts (Apr 2026)</td>
+        <td><span class="pct">60%</span> of China's oil transits here</td>
+        <td><span class="badge badge-green" style="font-size:9px">CONTROLLED</span></td>
+        <td style="color:var(--muted)">Indonesia political stability</td>
+      </tr>
+      <tr>
+        <td class="strait">Strait of Gibraltar</td>
+        <td>Morocco deal Apr 17, 2026</td>
+        <td>Mediterranean trade control</td>
+        <td><span class="badge badge-green" style="font-size:9px">SECURED</span></td>
+        <td style="color:var(--muted)">Morocco ratification pending</td>
+      </tr>
+      <tr>
+        <td class="strait">Strait of Hormuz</td>
+        <td>Iranian naval degradation</td>
+        <td>Gulf export corridor</td>
+        <td><span class="badge badge-cyan" style="font-size:9px">MONITORING</span></td>
+        <td style="color:var(--muted)">Faction reactivation risk</td>
+      </tr>
+      <tr>
+        <td class="strait">Panama Canal</td>
+        <td>Cooperation agreements</td>
+        <td>Western Hemisphere transit</td>
+        <td><span class="badge badge-yellow" style="font-size:9px">ONGOING</span></td>
+        <td style="color:var(--muted)">Chinese port operator presence</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- GS:END:chokepoint_table -->
+
+
+  <!-- RECENT INTEL FEED -->
+  <div class="section-header">
+    <span class="section-title">Recent Intel Feed</span>
+    <span class="section-line"></span>
+    <span class="section-count">AUTO-UPDATED · CLAUDE-CURATED</span>
+  </div>
+
+  <div class="feed-list">
+    <!-- GS:START:feed -->
+    <div class="feed-item">
+      <div class="feed-date">2026-04-29</div>
+      <div class="feed-title">
+        <div><span class="feed-tag tag-energy">ENERGY</span></div>
+        US Maritime Action Plan activates tanker-build requirement for LNG buyer nations
+      </div>
+      <div class="feed-source">Peterson Intel</div>
+    </div>
+    <div class="feed-item">
+      <div class="feed-date">2026-04-17</div>
+      <div class="feed-title">
+        <div><span class="feed-tag tag-chokepoints">CHOKEPOINTS</span></div>
+        Morocco–US Gibraltar cooperation deal signed, Mediterranean access formalized
+      </div>
+      <div class="feed-source">Peterson Intel</div>
+    </div>
+    <div class="feed-item">
+      <div class="feed-date">2026-03-02</div>
+      <div class="feed-title">
+        <div><span class="feed-tag tag-qatar">QATAR LNG</span></div>
+        Ras Laffan and Mesaieed strikes remove 20% of global LNG capacity instantly
+      </div>
+      <div class="feed-source">Peterson Intel</div>
+    </div>
+    <div class="feed-item">
+      <div class="feed-date">2026-02-01</div>
+      <div class="feed-title">
+        <div><span class="feed-tag tag-iran">IRAN</span></div>
+        US–Israel operation decapitates Iranian supreme leadership; regime enters fragmentation
+      </div>
+      <div class="feed-source">Peterson Intel</div>
+    </div>
+    <div class="feed-item">
+      <div class="feed-date">2026-01-03</div>
+      <div class="feed-title">
+        <div><span class="feed-tag tag-venezuela">VENEZUELA</span></div>
+        Maduro captured in US military operation; Venezuelan oil exports transferred to US control
+      </div>
+      <div class="feed-source">Peterson Intel</div>
+    </div>
+    <!-- GS:END:feed -->
+  </div>
+
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────────── -->
+<footer>
+  <a href="index.html">← FUSION WATCH</a> &nbsp;·&nbsp;
+  PETERSON INTELLIGENCE TRACKER &nbsp;·&nbsp;
+  GRAND STRATEGY MODULE &nbsp;·&nbsp;
+  AUTO-UPDATED VIA GITHUB ACTIONS + CLAUDE API &nbsp;·&nbsp;
+  ANONYMOUS PUBLICATION
+</footer>
+
+</body>
+</html>
