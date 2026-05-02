@@ -45,13 +45,13 @@ jobs:
 
       - name: Run Grand Strategy updater
         env:
-          ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_MODEL:      ${{ github.event.inputs.model || 'claude-opus-4-5' }}
-          GS_HTML_PATH:         grand-strategy.html
-          MAX_FEED_ITEMS:       "8"
-          GMAIL_ADDRESS:        ${{ secrets.GMAIL_ADDRESS }}
-          GMAIL_APP_PASSWORD:   ${{ secrets.GMAIL_APP_PASSWORD }}
-          BRIEFING_TO_EMAIL:    ${{ secrets.BRIEFING_TO_EMAIL }}
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL:     ${{ github.event.inputs.model || 'claude-opus-4-5' }}
+          GS_HTML_PATH:        grand-strategy.html
+          MAX_FEED_ITEMS:      "8"
+          GMAIL_ADDRESS:       ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD:  ${{ secrets.GMAIL_APP_PASSWORD }}
+          BRIEFING_TO_EMAIL:   ${{ secrets.BRIEFING_TO_EMAIL }}
 
         run: |
           DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
