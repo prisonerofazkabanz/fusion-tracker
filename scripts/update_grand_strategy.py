@@ -120,28 +120,31 @@ def _markdown_to_html(md):
     for line in lines:
         if line.startswith("|"):
             if not in_table: out.append("<table>"); in_table=True
-            if re.match(r"^\|[-| :]+\|$",line): continue
-            cells=[c.strip() for c in line.strip("|").split("|")]
-            tag="th" if not any("<td" in r for r in out[-5:]) else "td"
-            out.append("<tr>"+"".join(f"<{tag}>{c}</{tag}>" for c in cells)+"</tr>"); continue
+            if re.match(r"^\|[-| :]+\|$", line): continue
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            tag = "th" if not any("<td" in r for r in out[-5:]) else "td"
+            out.append("<tr>" + "".join(f"<{tag}>{c}</{tag}>" for c in cells) + "</tr>"); continue
         else:
             if in_table: out.append("</table>"); in_table=False
         if line.startswith("### "): out.append(f"<h3>{line[4:]}</h3>"); continue
-        if line.startswith("## "): out.append(f"<h2>{line[3:]}</h2>"); continue
-        if line.startswith("# "): out.append(f"<h1>{line[2:]}</h1>"); continue
-        if re.match(r"^\d+\. ",line):
+        if line.startswith("## "):  out.append(f"<h2>{line[3:]}</h2>"); continue
+        if line.startswith("# "):   out.append(f"<h1>{line[2:]}</h1>"); continue
+        if re.match(r"^\d+\. ", line):
             if not in_list: out.append("<ol>"); in_list=True
-            _li_text = re.sub(r"^\d+\.\s*", "", line): out.append("<li>" + _li_text + "</li>"); continue
+            _li_text = re.sub(r"^\d+\.\s*", "", line)
+            out.append("<li>" + _li_text + "</li>")
+            continue
         else:
             if in_list: out.append("</ol>"); in_list=False
-        if line.strip() in ("---","***","___"): out.append("<hr>"); continue
-        line=re.sub(r"\*\*(.+?)\*\*",r"<strong>\1</strong>",line)
-        line=re.sub(r"\*(.+?)\*",r"<em>\1</em>",line)
-        line=re.sub(r"`(.+?)`",r"<code>\1</code>",line)
+        if line.strip() in ("---", "***", "___"): out.append("<hr>"); continue
+        line = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", line)
+        line = re.sub(r"\*(.+?)\*",     r"<em>\1</em>",         line)
+        line = re.sub(r"`(.+?)`",       r"<code>\1</code>",      line)
         out.append("<br>" if not line.strip() else f"<p>{line}</p>")
     if in_table: out.append("</table>")
-    if in_list: out.append("</ol>")
+    if in_list:  out.append("</ol>")
     return "\n".join(out)
+
 
 
 def send_briefing_email(briefing_md: str, today: str) -> bool:
