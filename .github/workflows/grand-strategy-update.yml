@@ -2,14 +2,14 @@ name: Grand Strategy Monthly Update
 
 on:
   schedule:
-    - cron: "0 6 1 * *"   # 1st of every month, 06:00 UTC
+    - cron: "0 6 1 * *"
 
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Dry run (print only, no commit)"
+        description: "Dry run (print only, no commit or email)"
         required: true
-        default: "true"
+        default: "false"
         type: choice
         options: ["true", "false"]
       model:
@@ -45,10 +45,14 @@ jobs:
 
       - name: Run Grand Strategy updater
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_MODEL:   ${{ github.event.inputs.model || 'claude-opus-4-5' }}
-          GS_HTML_PATH:      grand-strategy.html
-          MAX_FEED_ITEMS:    "8"
+          ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL:      ${{ github.event.inputs.model || 'claude-opus-4-5' }}
+          GS_HTML_PATH:         grand-strategy.html
+          MAX_FEED_ITEMS:       "8"
+          GMAIL_ADDRESS:        ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD:   ${{ secrets.GMAIL_APP_PASSWORD }}
+          BRIEFING_TO_EMAIL:    ${{ secrets.BRIEFING_TO_EMAIL }}
+
         run: |
           DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
           if [ "$DRY_RUN" = "true" ]; then
@@ -57,14 +61,14 @@ jobs:
             python scripts/update_grand_strategy.py --html grand-strategy.html
           fi
 
-      - name: Commit and push
+      - name: Commit and push updated HTML
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           git config user.name  "grand-strategy-bot"
           git config user.email "bot@users.noreply.github.com"
           git add grand-strategy.html
           if git diff --cached --quiet; then
-            echo "No changes — skipping commit."
+            echo "No changes detected — skipping commit."
           else
             DATE=$(date -u +"%Y-%m-%d")
             git commit -m "chore: auto-update grand-strategy.html [${DATE}] [skip ci]"
