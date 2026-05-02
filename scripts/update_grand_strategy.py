@@ -348,6 +348,89 @@ def build_feed_html(items):
         """).strip())
     return "\n    ".join(rows)
 
+def send_briefing_email(briefing_md: str, today: str) -> bool:
+    """Send the monthly briefing via Gmail SMTP + App Password. No third-party service needed."""
+    import smtplib
+    import ssl
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text      import MIMEText
+
+    gmail_address   = os.environ.get("GMAIL_ADDRESS")
+    gmail_app_pass  = os.environ.get("GMAIL_APP_PASSWORD")
+    to_email        = os.environ.get("BRIEFING_TO_EMAIL")
+
+    if not all([gmail_address, gmail_app_pass, to_email]):
+        print("  [WARN] GMAIL_ADDRESS / GMAIL_APP_PASSWORD / BRIEFING_TO_EMAIL not set — skipping email.", file=sys.stderr)
+        return False
+
+    subject = f"Peterson Intelligence // Grand Strategy — {today}"
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"]    = f"Peterson Intelligence <{gmail_address}>"
+    msg["To"]      = to_email
+
+    # Plain text part (Proton will always show this as fallback)
+    msg.attach(MIMEText(briefing_md, "plain"))
+
+    # HTML part — dark intel styling matching the site
+    html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><style>
+  body {{
+    margin:0; padding:0;
+    background-color:#080c10;
+    color:#c8d8e8;
+    font-family:'Courier New',Courier,monospace;
+    font-size:13px; line-height:1.7;
+  }}
+  .wrapper {{
+    max-width:720px; margin:0 auto;
+    padding:32px 28px 40px;
+    background:#0d1219;
+    border-left:3px solid #FF6B1A;
+  }}
+  h1  {{ font-size:20px; color:#FF6B1A; text-transform:uppercase; letter-spacing:.04em; margin:0 0 2px; }}
+  h2  {{ font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
+         color:#FF6B1A; margin:28px 0 8px; padding-bottom:5px;
+         border-bottom:1px solid rgba(255,107,26,.25); }}
+  h3  {{ font-size:10px; color:#4a6070; letter-spacing:.12em; margin:0 0 24px; font-weight:400; }}
+  p   {{ margin:0 0 12px; }}
+  strong {{ color:#e8f4ff; }}
+  em  {{ color:#4a6070; font-style:normal; font-size:11px; }}
+  hr  {{ border:none; border-top:1px solid rgba(255,107,26,.18); margin:24px 0; }}
+  table {{ width:100%; border-collapse:collapse; margin:10px 0 18px; font-size:12px; }}
+  th  {{ text-align:left; padding:7px 11px; color:#FF6B1A; font-size:10px;
+         letter-spacing:.1em; text-transform:uppercase;
+         border-bottom:1px solid rgba(255,107,26,.3);
+         background:rgba(255,107,26,.05); }}
+  td  {{ padding:7px 11px; border-bottom:1px solid rgba(255,255,255,.05); vertical-align:top; }}
+  ol  {{ padding-left:18px; margin:6px 0 14px; }}
+  li  {{ margin:5px 0; line-height:1.6; }}
+  .footer {{ margin-top:32px; padding-top:14px;
+             border-top:1px solid rgba(255,107,26,.12);
+             font-size:10px; color:#2a3a4a; letter-spacing:.08em; text-transform:uppercase; }}
+</style></head>
+<body><div class="wrapper">
+{_markdown_to_html(briefing_md)}
+<div class="footer">
+  Automated · GitHub Actions + Claude · Grand Strategy Module · Anonymous
+</div>
+</div></body></html>"""
+
+    msg.attach(MIMEText(html_content, "html"))
+
+    try:
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(gmail_address, gmail_app_pass)
+            server.sendmail(gmail_address, to_email, msg.as_string())
+        print(f"  ✓ Briefing emailed → {to_email}")
+        return True
+    except Exception as e:
+        print(f"  ✗ Email error: {e}", file=sys.stderr)
+        return False
+
 
 def main():
     parser = argparse.ArgumentParser()
