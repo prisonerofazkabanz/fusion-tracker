@@ -29,6 +29,7 @@ import feedparser
 import requests
 from bs4 import BeautifulSoup
 import anthropic
+import time
 
 DATA_FILE      = os.getenv("FW_DATA_PATH", "data.json")
 MODEL          = os.getenv("ANTHROPIC_MODEL", "claude-opus-4-5")
@@ -141,7 +142,18 @@ STATUS_OPTIONS = {
     "alert":   ["At Risk", "Setback", "Funding Gap", "Critical Issue"],
 }
 
-
+def claude_with_retry(client, **kwargs):
+    """Call Claude with up to 3 retries on 529 Overloaded errors."""
+    for attempt in range(4):
+        try:
+            return client.messages.create(**kwargs)
+        except anthropic.APIStatusError as exc:
+            if exc.status_code == 529 and attempt < 3:
+                wait = 15 * (2 ** attempt)   # 15s, 30s, 60s
+                print(f"  [RETRY] Overloaded (529) — waiting {wait}s (attempt {attempt+1}/3)...")
+                time.sleep(wait)
+            else:
+                raise
 def fetch_feed_items(company):
     items    = []
     keywords = [k.lower() for k in company["keywords"]]
@@ -218,7 +230,7 @@ def analyze_company(client, company, current_data, feed_items, today):
         Keep metrics at exactly 3 items. Return ONLY JSON.
     """).strip()
 
-    msg = client.messages.create(model=MODEL, max_tokens=600, system=SYSTEM_PROMPT,
+    msg = claude_with_retry(client,model=MODEL, max_tokens=600, system=SYSTEM_PROMPT,
                                   messages=[{"role": "user", "content": prompt}])
     raw = re.sub(r"^```(?:json)?\s*", "", msg.content[0].text.strip(), flags=re.MULTILINE)
     raw = re.sub(r"\s*```$", "", raw, flags=re.MULTILINE)
@@ -251,7 +263,7 @@ def analyze_banner(client, company_results, global_items, today):
         Return ONLY JSON.
     """).strip()
 
-    msg = client.messages.create(model=MODEL, max_tokens=300, system=SYSTEM_PROMPT,
+    msg = claude_with_retry(client,model=MODEL, max_tokens=300, system=SYSTEM_PROMPT,
                                   messages=[{"role": "user", "content": prompt}])
     raw = re.sub(r"^```(?:json)?\s*", "", msg.content[0].text.strip(), flags=re.MULTILINE)
     raw = re.sub(r"\s*```$", "", raw, flags=re.MULTILINE)
@@ -279,7 +291,7 @@ def analyze_timeline(client, current_timeline, tae_result, today):
         Return JSON array only. No markdown.
     """).strip()
 
-    msg = client.messages.create(model=MODEL, max_tokens=600, system=SYSTEM_PROMPT,
+    msg = claude_with_retry(client,model=MODEL, max_tokens=600, system=SYSTEM_PROMPT,
                                   messages=[{"role": "user", "content": prompt}])
     raw = re.sub(r"^```(?:json)?\s*", "", msg.content[0].text.strip(), flags=re.MULTILINE)
     raw = re.sub(r"\s*```$", "", raw, flags=re.MULTILINE)
