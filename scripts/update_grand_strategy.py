@@ -32,6 +32,7 @@ import feedparser
 import requests
 from bs4 import BeautifulSoup
 import anthropic
+import time
 
 # ---------------------------------------------------------------------------
 # CONFIG
@@ -235,7 +236,18 @@ def fetch_feed_items(topic):
 # ---------------------------------------------------------------------------
 # CLAUDE — PER-TOPIC ANALYSIS
 # ---------------------------------------------------------------------------
-
+def claude_with_retry(client, **kwargs):
+    """Call Claude with up to 3 retries on 529 Overloaded errors."""
+    for attempt in range(4):
+        try:
+            return client.messages.create(**kwargs)
+        except anthropic.APIStatusError as exc:
+            if exc.status_code == 529 and attempt < 3:
+                wait = 15 * (2 ** attempt)   # 15s, 30s, 60s
+                print(f"  [RETRY] Overloaded (529) — waiting {wait}s (attempt {attempt+1}/3)...")
+                time.sleep(wait)
+            else:
+                raise
 def analyze_topic(client, topic, feed_items, today):
     items_text = "\n".join(
         f"[{i+1}] {it['date']} | {it['source']}\n    {it['title']}\n    {it['summary']}"
@@ -282,7 +294,7 @@ def analyze_topic(client, topic, feed_items, today):
         Return ONLY the JSON. No markdown fences. No extra text.
     """).strip()
 
-    msg = client.messages.create(
+    msg = claude_with_retry(client,
         model=MODEL,
         max_tokens=1200,
         system=SYSTEM_PROMPT,
@@ -327,7 +339,7 @@ def analyze_banner_and_feed(client, all_results, today):
         Return ONLY JSON. No markdown fences.
     """).strip()
 
-    msg = client.messages.create(
+    msg = claude_with_retry(client,
         model=MODEL,
         max_tokens=600,
         system=SYSTEM_PROMPT,
@@ -422,7 +434,7 @@ def generate_briefing(client, all_results, today):
         Rules: assertive present-tense, no hedging, 900-1100 words, proper markdown tables.
     """).strip()
 
-    msg = client.messages.create(
+    msg = claude_with_retry(client,
         model=MODEL,
         max_tokens=2500,
         system=BRIEFING_SYSTEM,
