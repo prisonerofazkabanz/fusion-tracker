@@ -38,9 +38,9 @@
   },
   "dynamic": {
     "milestone_banner": {
-      "text": "KSTAR achieved 100 million degree ion temperature in May 2026 following its 102-second plasma record, while Helion's Polaris reached 150 million degrees in February and EAST exceeded the Greenwald density limit in January 2026.",
-      "highlight": "100 million degree ion temperature",
-      "last_updated": "2026-06-01"
+      "text": "In June 2026, Helion secured regulatory licenses for the world's first fusion power plant in Washington state, while DOE approved Xcimer's laser fusion design and CFS became the first fusion company to apply for PJM grid interconnection.",
+      "highlight": "world's first fusion power plant",
+      "last_updated": "2026-07-01"
     },
     "companies": {
       "kstar": {
@@ -49,7 +49,7 @@
         "flag": "active",
         "status_label": "Record Set",
         "status_class": "active",
-        "description": "KSTAR achieves ion temperature of 100 million degrees in May 2026 following 102-second plasma record. Operating in tungsten environment with ongoing experiments targeting 300-second operation at 100 million degrees.",
+        "description": "KSTAR achieved 100 million degree ion temperature in late 2025 while operating in full tungsten environment. Ongoing experiments target extending 100-million-degree plasma operation toward 300-second goal.",
         "metrics": [
           {
             "val": "102s",
@@ -64,15 +64,15 @@
             "key": "FUNDING"
           }
         ],
-        "last_updated": "2026-06-01"
+        "last_updated": "2026-07-01"
       },
       "cfs": {
         "name": "Commonwealth Fusion",
         "sub": "CFS · Cambridge, MA",
         "flag": "active",
-        "status_label": "Advancing",
+        "status_label": "Milestone Achieved",
         "status_class": "active",
-        "description": "CFS partnered with Nvidia and Siemens to develop an AI-powered digital twin for SPARC, while delivering the first production magnet for reactor assembly. SPARC construction progresses toward 2027 first plasma as ARC commercial plant planning advances in Virginia.",
+        "description": "CFS published five peer-reviewed papers validating ARC physics and became the first fusion company to apply for PJM grid interconnection. SPARC construction continues with installed magnets and AI digital twin development with Nvidia/Siemens, targeting 2027 first plasma.",
         "metrics": [
           {
             "val": "$1.8B+",
@@ -83,23 +83,23 @@
             "key": "SPARC TARGET"
           },
           {
-            "val": "20T",
-            "key": "MAGNET FIELD"
+            "val": "5",
+            "key": "ARC PAPERS"
           }
         ],
-        "last_updated": "2026-06-01"
+        "last_updated": "2026-07-01"
       },
       "helion": {
         "name": "Helion Energy",
         "sub": "Everett, WA",
         "flag": "active",
-        "status_label": "On Track",
+        "status_label": "Milestone Achieved",
         "status_class": "active",
-        "description": "Polaris continues development following February 2026 temperature milestone of 150 million degrees. Scientific American profiling Helion's technology readiness as company advances toward 2028 commercial power target.",
+        "description": "Helion secured key licenses for building and operating its fusion power plant in Central Washington in June 2026. Company raised $465M at $15.5B valuation while advancing OpenAI power deal negotiations alongside existing Microsoft PPA.",
         "metrics": [
           {
-            "val": "150M°",
-            "key": "PLASMA TEMP"
+            "val": "$15.5B",
+            "key": "VALUATION"
           },
           {
             "val": "2028",
@@ -110,15 +110,15 @@
             "key": "PPA TALKS"
           }
         ],
-        "last_updated": "2026-06-01"
+        "last_updated": "2026-07-01"
       },
       "tae": {
         "name": "TAE Technologies / TMTG",
         "sub": "Foothill Ranch, CA · DJT Merger",
         "flag": "deal",
-        "status_label": "Under Review",
+        "status_label": "Deal Active",
         "status_class": "deal",
-        "description": "TAE-Trump Media $6B all-stock merger continues SEC S-4 review with mid-2026 close target. TMTG interim CEO pursuing Truth Social spinout as separate listed entity while TAE combination advances.",
+        "description": "TAE-TMTG $6B merger advances with Truth Social spinoff cancelled, confirming integrated company structure. Jeff Woodbury appointed TAE President/COO as parties reaffirm mid-2026 close timeline pending SEC S-4 clearance.",
         "metrics": [
           {
             "val": "$6B",
@@ -133,7 +133,7 @@
             "key": "SEC S-4"
           }
         ],
-        "last_updated": "2026-06-01"
+        "last_updated": "2026-07-01"
       },
       "iter": {
         "name": "ITER",
@@ -141,7 +141,7 @@
         "flag": "active",
         "status_label": "Advancing",
         "status_class": "active",
-        "description": "ITER launches Private Sector Fusion Engagement Project to deepen industry collaboration. US completed final central solenoid deliveries and French regulator exempted vacuum vessel from fission-based rules, streamlining assembly.",
+        "description": "ITER magnet cold test facility begins operations, marking key assembly milestone. French regulator exempts vacuum vessel from fission-based rules, streamlining path to first plasma.",
         "metrics": [
           {
             "val": "$22B+",
@@ -156,7 +156,7 @@
             "key": "NATIONS"
           }
         ],
-        "last_updated": "2026-06-01"
+        "last_updated": "2026-07-01"
       },
       "east": {
         "name": "EAST / China Program",
@@ -164,7 +164,7 @@
         "flag": "active",
         "status_label": "Record Set",
         "status_class": "active",
-        "description": "EAST tokamak exceeded the Greenwald density limit in January 2026, achieving plasma densities previously considered theoretically impossible. This breakthrough solidifies China's position alongside KSTAR as a leader in sustained high-density plasma research.",
+        "description": "EAST tokamak exceeded the Greenwald density limit in January 2026, achieving plasma densities previously considered theoretically impossible. China continues advancing high-density plasma research alongside KSTAR as a global leader in sustained fusion experiments.",
         "metrics": [
           {
             "val": "$1.5B",
@@ -179,7 +179,7 @@
             "key": "RECORD SET"
           }
         ],
-        "last_updated": "2026-06-01"
+        "last_updated": "2026-07-01"
       }
     },
     "timeline": [
@@ -198,7 +198,7 @@
       {
         "date": "MID-2026 · PENDING",
         "title": "Shareholder + Regulatory Close",
-        "detail": "SEC S-4 review ongoing. TMTG considering Truth Social spinout into separate listed company. Trump Jr. joins board. Mid-2026 close target intact.",
+        "detail": "SEC S-4 review ongoing. Truth Social spinoff cancelled; integrated company structure confirmed. Jeff Woodbury appointed TAE President/COO. Trump Jr. joins board. Mid-2026 close target reaffirmed.",
         "status": "pending"
       },
       {
@@ -214,7 +214,7 @@
         "status": "future"
       }
     ],
-    "last_auto_update": "2026-06-01",
+    "last_auto_update": "2026-07-01",
     "auto_update_summary": "Auto-updated 6/6 companies via Claude + RSS. Locked fields unchanged."
   }
 }
