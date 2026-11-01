@@ -38,9 +38,9 @@
   },
   "dynamic": {
     "milestone_banner": {
-      "text": "On September 30, 2026, TAE Technologies and Trump Media filed SEC Form S-4 advancing their proposed $6B all-stock merger, while KSTAR achieved a 48-second plasma hold at 100 million degrees and LLNL/Pacific Fusion reached 3,000 shots with their Sirius pulsed-power prototype in July 2026.",
-      "highlight": "$6B all-stock merger",
-      "last_updated": "2026-10-01"
+      "text": "On October 2026, General Fusion reported electron temperatures exceeding 1 keV and claimed a 'world first' milestone, while ITER completed delivery of all vacuum vessel sectors needed for core machine assembly.",
+      "highlight": "General Fusion claims 'world first' milestone",
+      "last_updated": "2026-11-01"
     },
     "companies": {
       "kstar": {
@@ -49,7 +49,7 @@
         "flag": "active",
         "status_label": "Record Set",
         "status_class": "active",
-        "description": "KSTAR achieved a 48-second plasma hold at 100 million degrees in its full tungsten environment, surpassing 20,000 total experiments. The facility continues advancing toward its 300-second plasma hold target.",
+        "description": "KSTAR achieved a 48-second plasma hold at 100 million degrees in its upgraded full tungsten divertor environment, continuing progress toward its 300-second target. The facility has surpassed 20,000 total experiments and continues advancing long-pulse plasma operation research.",
         "metrics": [
           {
             "val": "48s",
@@ -64,7 +64,7 @@
             "key": "FUNDING"
           }
         ],
-        "last_updated": "2026-10-01"
+        "last_updated": "2026-11-01"
       },
       "cfs": {
         "name": "Commonwealth Fusion",
@@ -72,10 +72,10 @@
         "flag": "active",
         "status_label": "Advancing",
         "status_class": "active",
-        "description": "CFS placed largest single HTS tape order with Fujikura to accelerate ARC commercial plant development while SPARC construction continues toward 2027 first plasma. Company secured additional $1B funding round bringing total to $5B as leadership prepares for Disrupt 2026 appearance.",
+        "description": "CFS secures $85M for fusion-ready semiconductor development while partnering with Siemens and NVIDIA on AI-powered digital twins for ARC commercial plant. SPARC construction continues toward 2027 first plasma with five peer-reviewed papers validating ARC physics published.",
         "metrics": [
           {
-            "val": "$5B",
+            "val": "$5B+",
             "key": "TOTAL RAISED"
           },
           {
@@ -83,11 +83,11 @@
             "key": "FIRST PLASMA"
           },
           {
-            "val": "5",
-            "key": "ARC PAPERS"
+            "val": "$85M",
+            "key": "SEMICONDUCTOR R&D"
           }
         ],
-        "last_updated": "2026-10-01"
+        "last_updated": "2026-11-01"
       },
       "helion": {
         "name": "Helion Energy",
@@ -95,22 +95,22 @@
         "flag": "watch",
         "status_label": "Delayed",
         "status_class": "watch",
-        "description": "Helion has shifted its first power timeline according to September 2026 reports, while setting a temperature record. Company cleared US regulatory licenses in June 2026 and continues OpenAI power deal negotiations alongside Microsoft PPA.",
+        "description": "Helion quietly shifted its first power timeline in September 2026 while achieving a plasma temperature record. The company raised $465M at a $15.5B valuation in June 2026 and continues advancing toward commercialization with US regulatory licenses cleared.",
         "metrics": [
+          {
+            "val": "$15.5B",
+            "key": "VALUATION"
+          },
           {
             "val": "RECORD",
             "key": "PLASMA TEMP"
           },
           {
-            "val": "TBD",
+            "val": "SHIFTED",
             "key": "FIRST POWER"
-          },
-          {
-            "val": "CLEARED",
-            "key": "US LICENSES"
           }
         ],
-        "last_updated": "2026-10-01"
+        "last_updated": "2026-11-01"
       },
       "tae": {
         "name": "TAE Technologies / TMTG",
@@ -118,7 +118,7 @@
         "flag": "deal",
         "status_label": "Under Review",
         "status_class": "deal",
-        "description": "TAE Technologies and Trump Media filed Form S-4 registration statement with SEC on September 30, 2026, advancing the proposed $6B all-stock merger. Trump retains significant ownership interest in combined entity per regulatory filing disclosures.",
+        "description": "TAE Technologies and Trump Media S-4 registration statement remains under SEC review following September 30, 2026 filing. Target close date of mid-2026 has passed with no announced completion; merger awaiting regulatory clearance.",
         "metrics": [
           {
             "val": "$6B",
@@ -129,19 +129,19 @@
             "key": "SEC STATUS"
           },
           {
-            "val": "MID-2026",
-            "key": "TARGET CLOSE"
+            "val": "PENDING",
+            "key": "CLOSE STATUS"
           }
         ],
-        "last_updated": "2026-10-01"
+        "last_updated": "2026-11-01"
       },
       "iter": {
         "name": "ITER",
         "sub": "Cadarache, France · International",
         "flag": "active",
-        "status_label": "Advancing",
+        "status_label": "Milestone Achieved",
         "status_class": "active",
-        "description": "ITER achieves regulatory milestone with vacuum vessel exemption from fission-based regulation while sixth tokamak sector module installation completes. Breeding blanket and tritium plant plans advance as project reports substantial summer progress toward 2027 first plasma.",
+        "description": "Europe delivers final vacuum vessel sector, completing all major components needed for ITER's core machine assembly. Project reports substantial progress in assembly work with 2027 first plasma target on track.",
         "metrics": [
           {
             "val": "$22B+",
@@ -152,11 +152,11 @@
             "key": "FIRST PLASMA"
           },
           {
-            "val": "6/9",
-            "key": "SECTORS INSTALLED"
+            "val": "9/9",
+            "key": "VV SECTORS DELIVERED"
           }
         ],
-        "last_updated": "2026-10-01"
+        "last_updated": "2026-11-01"
       },
       "east": {
         "name": "EAST / China Program",
@@ -179,7 +179,7 @@
             "key": "RECORD SET"
           }
         ],
-        "last_updated": "2026-10-01"
+        "last_updated": "2026-11-01"
       }
     },
     "timeline": [
@@ -220,7 +220,7 @@
         "status": "future"
       }
     ],
-    "last_auto_update": "2026-10-01",
+    "last_auto_update": "2026-11-01",
     "auto_update_summary": "Auto-updated 6/6 companies via Claude + RSS. Locked fields unchanged."
   }
 }
